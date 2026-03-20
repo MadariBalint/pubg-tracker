@@ -1,3 +1,5 @@
+import type { Team } from "../features/tracker/trackerTypes";
+
 const teamNames = [
   "Canada",
   "Poland",
