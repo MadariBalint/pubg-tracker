@@ -6,7 +6,7 @@ const initialState: TrackerState = {
   mode: "squad",
   maxPlayersPerTeam: 4,
   maxTeams: 25,
-  teams: createTeams(25, 4),
+  teams: createTeams(16, 4),
 };
 
 const trackerSlice = createSlice({
@@ -37,11 +37,11 @@ const trackerSlice = createSlice({
       if (action.payload === "squad") {
         state.maxPlayersPerTeam = 4;
         state.maxTeams = 25;
-        state.teams = createTeams(25, 4);
+        state.teams = createTeams(16, 4);
       } else {
         state.maxPlayersPerTeam = 2;
-        state.maxTeams = 5;
-        state.teams = createTeams(50, 2);
+        state.maxTeams = 50;
+        state.teams = createTeams(32, 2);
       }
     },
 

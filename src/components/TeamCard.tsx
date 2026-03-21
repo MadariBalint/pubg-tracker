@@ -25,10 +25,10 @@ export default function TeamCard({ team }: TeamCardProps) {
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className=" flex flex-col ">
       <button
         className={[
-          "flex min-h-[104px] cursor-pointer items-center justify-between rounded-[24px] border px-[18px] py-[14px]",
+          "flex items-center p-3 gap-2 overflow-hidden rounded-[24px] border",
           isDead
             ? "border-[#0b0b0b] bg-gradient-to-r from-[#4f4f4f] to-[#5b5b5b] text-[#a7a7a7] opacity-95"
             : "border-[#0b0b0b] bg-gradient-to-r from-[#1e2f46] to-[#22314f] text-white",
@@ -36,11 +36,11 @@ export default function TeamCard({ team }: TeamCardProps) {
         onClick={handleLeftClick}
         onContextMenu={handleRightClick}
       >
-        <span className="text-[72px] leading-none">{team.flag}</span>
+        <img src={team.flag} alt="" className="h-auto w-[50%] object-contain" />
 
         <span
           className={[
-            "text-[56px] font-light",
+            "flex-1 text-center leading-none font-light text-6xl",
             isDead ? "text-white/35" : "text-white/85",
           ].join(" ")}
         >
@@ -49,9 +49,10 @@ export default function TeamCard({ team }: TeamCardProps) {
       </button>
 
       <div
-        className={
-          isDead ? "text-[18px] text-[#8a8a8a]" : "text-[18px] text-[#8ba4c3]"
-        }
+        className={[
+          "text-lg truncate",
+          isDead ? "text-[#8a8a8a]" : "text-[#8ba4c3]",
+        ].join(" ")}
       >
         {team.slot} {team.name}
       </div>
