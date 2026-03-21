@@ -36,7 +36,7 @@ export default function TeamCard({ team }: TeamCardProps) {
         onClick={handleLeftClick}
         onContextMenu={handleRightClick}
       >
-        <img src={team.flag} alt="" className="h-auto w-[50%] object-contain" />
+        <img src={team.flag} alt="" className="h-auto w-[40%] object-contain" />
 
         <span
           className={[
