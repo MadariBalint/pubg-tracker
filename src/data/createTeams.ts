@@ -108,10 +108,10 @@ const flagMap: string[] = [
 
 export function createTeams(teamCount: number, playersPerTeam: number): Team[] {
   return Array.from({ length: teamCount }, (_, index) => ({
-    id: index + 1,
-    slot: index + 1,
-    name: teamNames[index] ?? `Team ${index + 1}`,
-    flag: flagMap[index] ?? "🏳️",
+    id: index + 3,
+    slot: index + 3,
+    name: teamNames[index + 2] ?? `Team ${index + 3}`,
+    flag: flagMap[index + 2] ?? "🏳️",
     alivePlayers: playersPerTeam,
   }));
 }
