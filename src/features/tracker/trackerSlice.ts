@@ -39,10 +39,12 @@ const trackerSlice = createSlice({
         state.maxPlayersPerTeam = 4;
         state.maxTeams = 25;
         state.teams = createTeams(16, 4, 1);
+        state.startSlot = 1;
       } else {
         state.maxPlayersPerTeam = 2;
         state.maxTeams = 50;
         state.teams = createTeams(32, 2, 1);
+        state.startSlot = 1;
       }
     },
 
