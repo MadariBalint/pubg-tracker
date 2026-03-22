@@ -6,7 +6,8 @@ const initialState: TrackerState = {
   mode: "squad",
   maxPlayersPerTeam: 4,
   maxTeams: 25,
-  teams: createTeams(16, 4),
+  teams: createTeams(16, 4, 1),
+  startSlot: 1,
 };
 
 const trackerSlice = createSlice({
@@ -37,11 +38,11 @@ const trackerSlice = createSlice({
       if (action.payload === "squad") {
         state.maxPlayersPerTeam = 4;
         state.maxTeams = 25;
-        state.teams = createTeams(16, 4);
+        state.teams = createTeams(16, 4, 1);
       } else {
         state.maxPlayersPerTeam = 2;
         state.maxTeams = 50;
-        state.teams = createTeams(32, 2);
+        state.teams = createTeams(32, 2, 1);
       }
     },
 
@@ -57,6 +58,7 @@ const trackerSlice = createSlice({
         state.teams.length,
         1,
         state.maxPlayersPerTeam,
+        state.startSlot,
       );
 
       state.teams.push(...newTeams);
@@ -65,6 +67,39 @@ const trackerSlice = createSlice({
     deleteTeam(state) {
       if (state.teams.length === 0) return;
       state.teams.pop();
+    },
+
+    setStartSlotToThree(state) {
+      if (state.mode === "squad") {
+        state.teams = createTeams(16, 4, 3);
+        state.startSlot = 3;
+      }
+      if (state.mode === "duo") {
+        state.teams = createTeams(32, 2, 3);
+        state.startSlot = 3;
+      }
+    },
+
+    setStartSlotToTwo(state) {
+      if (state.mode === "squad") {
+        state.teams = createTeams(16, 4, 2);
+        state.startSlot = 2;
+      }
+      if (state.mode === "duo") {
+        state.teams = createTeams(32, 2, 2);
+        state.startSlot = 2;
+      }
+    },
+
+    setStartSlotToOne(state) {
+      if (state.mode === "squad") {
+        state.teams = createTeams(16, 4, 1);
+        state.startSlot = 1;
+      }
+      if (state.mode === "duo") {
+        state.teams = createTeams(32, 2, 1);
+        state.startSlot = 1;
+      }
     },
   },
 });
@@ -76,6 +111,9 @@ export const {
   resetAllTeams,
   addOneTeam,
   deleteTeam,
+  setStartSlotToThree,
+  setStartSlotToTwo,
+  setStartSlotToOne,
 } = trackerSlice.actions;
 
 export default trackerSlice.reducer;

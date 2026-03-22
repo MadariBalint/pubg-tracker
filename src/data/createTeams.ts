@@ -106,12 +106,16 @@ const flagMap: string[] = [
   "/images/50-PIR.png",
 ];
 
-export function createTeams(teamCount: number, playersPerTeam: number): Team[] {
+export function createTeams(
+  teamCount: number,
+  playersPerTeam: number,
+  startSlot: number,
+): Team[] {
   return Array.from({ length: teamCount }, (_, index) => ({
     id: index + 1,
-    slot: index + 1,
-    name: teamNames[index] ?? `Team ${index + 1}`,
-    flag: flagMap[index] ?? "🏳️",
+    slot: startSlot + index,
+    name: teamNames[index + (startSlot - 1)] ?? `Team ${index + 1}`,
+    flag: flagMap[index + (startSlot - 1)] ?? "🏳️",
     alivePlayers: playersPerTeam,
   }));
 }
@@ -120,9 +124,10 @@ export function createAdditionalTeams(
   startIndex: number,
   count: number,
   playersPerTeam: number,
+  startSlot: number,
 ): Team[] {
   return Array.from({ length: count }, (_, index) => {
-    const teamIndex = startIndex + index;
+    const teamIndex = startIndex + (startSlot - 1) + index;
 
     return {
       id: teamIndex + 1,

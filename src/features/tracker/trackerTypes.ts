@@ -12,5 +12,6 @@ export type TrackerState = {
   mode: GameMode;
   maxPlayersPerTeam: number;
   maxTeams: number;
+  startSlot: number;
   teams: Team[];
 };

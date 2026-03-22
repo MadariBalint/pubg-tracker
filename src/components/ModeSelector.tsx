@@ -5,6 +5,9 @@ import {
   deleteTeam,
   resetAllTeams,
   setMode,
+  setStartSlotToOne,
+  setStartSlotToThree,
+  setStartSlotToTwo,
 } from "../features/tracker/trackerSlice";
 
 export default function ModeSelector() {
@@ -39,6 +42,24 @@ export default function ModeSelector() {
       </button>
       <button className={baseButton} onClick={() => dispatch(deleteTeam())}>
         Delete Team
+      </button>
+      <button
+        className={baseButton}
+        onClick={() => dispatch(setStartSlotToOne())}
+      >
+        Start Slot #1
+      </button>
+      <button
+        className={baseButton}
+        onClick={() => dispatch(setStartSlotToTwo())}
+      >
+        Start Slot #2
+      </button>
+      <button
+        className={baseButton}
+        onClick={() => dispatch(setStartSlotToThree())}
+      >
+        Start Slot #3
       </button>
     </div>
   );
