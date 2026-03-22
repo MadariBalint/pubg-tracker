@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { createTeams } from "../../data/createTeams";
+import { createAdditionalTeams, createTeams } from "../../data/createTeams";
 import type { GameMode, TrackerState } from "./trackerTypes";
 
 const initialState: TrackerState = {
@@ -50,6 +50,22 @@ const trackerSlice = createSlice({
         team.alivePlayers = state.maxPlayersPerTeam;
       });
     },
+
+    addOneTeam(state) {
+      if (state.teams.length >= state.maxTeams) return;
+      const newTeams = createAdditionalTeams(
+        state.teams.length,
+        1,
+        state.maxPlayersPerTeam,
+      );
+
+      state.teams.push(...newTeams);
+    },
+
+    deleteTeam(state) {
+      if (state.teams.length === 0) return;
+      state.teams.pop();
+    },
   },
 });
 
@@ -58,6 +74,8 @@ export const {
   increaseAlivePlayers,
   setMode,
   resetAllTeams,
+  addOneTeam,
+  deleteTeam,
 } = trackerSlice.actions;
 
 export default trackerSlice.reducer;
