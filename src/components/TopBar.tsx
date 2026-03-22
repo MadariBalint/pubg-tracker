@@ -52,14 +52,19 @@ export default function TopBar() {
           <span>👤👤</span>
           <span>{aliveDuos}</span>
         </div>
-        <div className="flex flex-col items-center">
-          <span>👤👤👤</span>
-          <span>{aliveTrios}</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <span>👤👤👤👤</span>
-          <span>{aliveSquads}</span>
-        </div>
+        {mode === "squad" && (
+          <div className="flex flex-col items-center">
+            <span>👤👤👤</span>
+            <span>{aliveTrios}</span>
+          </div>
+        )}
+
+        {mode === "squad" && (
+          <div className="flex flex-col items-center">
+            <span>👤👤👤👤</span>
+            <span>{aliveSquads}</span>
+          </div>
+        )}
       </div>
 
       <div className="ml-auto text-[18px]">
