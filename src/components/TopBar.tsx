@@ -13,7 +13,7 @@ type TopBarProps = {
 
 export default function TopBar({ unknownDeaths, unknownRecalls }: TopBarProps) {
   const alivePlayers =
-    useAppSelector(selectAlivePlayersTotal) + unknownDeaths + unknownRecalls;
+    useAppSelector(selectAlivePlayersTotal) - unknownDeaths + unknownRecalls;
   const aliveTeams = useAppSelector(selectAliveTeamsTotal);
   const mode = useAppSelector(selectMode);
 
