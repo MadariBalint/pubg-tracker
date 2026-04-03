@@ -6,8 +6,9 @@ import {
   selectTeams,
 } from "../features/tracker/trackerSelector";
 
-export default function TopBar() {
-  const alivePlayers = useAppSelector(selectAlivePlayersTotal);
+export default function TopBar({ unknownDeaths, unknownRecalls }) {
+  const alivePlayers =
+    useAppSelector(selectAlivePlayersTotal) - unknownDeaths - unknownRecalls;
   const aliveTeams = useAppSelector(selectAliveTeamsTotal);
   const mode = useAppSelector(selectMode);
 

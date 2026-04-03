@@ -19,7 +19,7 @@ export default function TeamGrid() {
               : "grid-cols-10";
 
   return (
-    <div className={`grid ${colsAmount} gap-4`}>
+    <div className={`grid ${colsAmount} gap-3`}>
       {teams.map((team) => (
         <TeamCard key={team.id} team={team} />
       ))}
