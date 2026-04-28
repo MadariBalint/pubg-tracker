@@ -28,22 +28,26 @@ export default function App() {
     event.preventDefault();
     if (unknownRecalls !== 0) setUnknownRecalls(unknownRecalls - 1);
   };
+  const handleResetTracker = () => {
+    setUnknownDeaths(0);
+    setUnknownRecalls(0);
+  };
 
   return (
-    <div className="min-h-dvh bg-[#161616] p-3 sm:p-5 text-[#f2f2f2]">
-      <div className="flex flex-col items-center gap-2">
+    <div className="min-h-dvh bg-[#161616] p-3 text-[#f2f2f2] sm:p-5">
+      <div className="flex min-h-dvh w-full flex-col items-center justify-between gap-2 sm:min-h-[calc(100dvh-2.5rem)] lg:gap-1.5">
         <div className="mx-auto w-full max-w-[1280px]">
           <TopBar
             unknownDeaths={unknownDeaths}
             unknownRecalls={unknownRecalls}
           />
-          <ModeSelector />
+          <ModeSelector onReset={handleResetTracker} />
         </div>
 
-        <div className="w-full max-w-[1440px]">
+        <div className="w-full grow max-w-[1600px]">
           <TeamGrid />
         </div>
-        <div className="mb-2 flex w-full max-w-[1280px] flex-wrap gap-1 sm:gap-2 lg:mb-6">
+        <div className="mb-2 flex w-full max-w-[1600px] flex-wrap gap-1 sm:gap-2 lg:mb-6">
           <button
             onClick={handleLeftClickDeaths}
             onContextMenu={handleRightClickDeaths}

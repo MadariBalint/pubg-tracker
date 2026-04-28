@@ -10,7 +10,11 @@ import {
   setStartSlotToTwo,
 } from "../features/tracker/trackerSlice";
 
-export default function ModeSelector() {
+type ModeSelectorProps = {
+  onReset: () => void;
+};
+
+export default function ModeSelector({ onReset }: ModeSelectorProps) {
   const dispatch = useAppDispatch();
   const mode = useAppSelector(selectMode);
 
@@ -33,7 +37,13 @@ export default function ModeSelector() {
       >
         Duo
       </button>
-      <button className={baseButton} onClick={() => dispatch(resetAllTeams())}>
+      <button
+        className={baseButton}
+        onClick={() => {
+          dispatch(resetAllTeams());
+          onReset();
+        }}
+      >
         Reset
       </button>
 
