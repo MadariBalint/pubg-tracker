@@ -15,12 +15,12 @@ export default function ModeSelector() {
   const mode = useAppSelector(selectMode);
 
   const baseButton =
-    "cursor-pointer border border-[#555]  px-3.5 py-2.5 text-white flex-1";
+    "cursor-pointer border border-[#555] px-3 py-2.5 text-white grow basis-[calc(50%-0.25rem)] sm:basis-auto sm:flex-1 whitespace-nowrap text-sm sm:text-base";
   const activeButton = "bg-[#325d9b]";
   const inactiveButton = "bg-[#242424]";
 
   return (
-    <div className="mb-2 gap-1 lg:mb-6 flex flex-wrap lg:gap-2.5 ">
+    <div className="mb-2 flex flex-wrap gap-1 sm:gap-2 lg:mb-6 lg:gap-2.5">
       <button
         className={`${baseButton} ${mode === "squad" ? activeButton : inactiveButton}`}
         onClick={() => dispatch(setMode("squad"))}

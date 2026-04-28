@@ -28,7 +28,7 @@ export default function TeamCard({ team }: TeamCardProps) {
     <div className=" flex flex-col ">
       <button
         className={[
-          "flex items-center p-3 gap-2 overflow-hidden rounded-[24px] border",
+          "flex items-center gap-2 overflow-hidden rounded-2xl border p-2 sm:rounded-[24px] sm:p-3",
           isDead
             ? "border-[#0b0b0b] bg-gradient-to-r from-[#4f4f4f] to-[#5b5b5b] text-[#a7a7a7] opacity-95"
             : "border-[#0b0b0b] bg-gradient-to-r from-[#1e2f46] to-[#22314f] text-white",
@@ -36,11 +36,11 @@ export default function TeamCard({ team }: TeamCardProps) {
         onClick={handleLeftClick}
         onContextMenu={handleRightClick}
       >
-        <img src={team.flag} alt="" className="h-auto w-[40%] object-contain" />
+        <img src={team.flag} alt="" className="h-auto w-[48%] object-contain" />
 
         <span
           className={[
-            "flex-1 text-center leading-none font-light text-6xl",
+            "flex-1 text-center font-light leading-none text-3xl sm:text-4xl lg:text-5xl",
             isDead ? "text-white/35" : "text-white/85",
           ].join(" ")}
         >
@@ -50,7 +50,7 @@ export default function TeamCard({ team }: TeamCardProps) {
 
       <div
         className={[
-          "text-lg truncate",
+          "truncate text-sm sm:text-base lg:text-lg",
           isDead ? "text-[#8a8a8a]" : "text-[#8ba4c3]",
         ].join(" ")}
       >

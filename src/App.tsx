@@ -5,7 +5,7 @@ import TopBar from "./components/TopBar";
 
 export default function App() {
   const baseButton =
-    "cursor-pointer border border-[#555]  px-3.5 py-2.5 text-white flex-1";
+    "cursor-pointer border border-[#555] px-3 py-2.5 text-white grow basis-[calc(50%-0.25rem)] sm:basis-auto sm:flex-1 whitespace-nowrap text-sm sm:text-base";
   const [unknownDeaths, setUnknownDeaths] = useState(0);
   const [unknownRecalls, setUnknownRecalls] = useState(0);
 
@@ -30,9 +30,9 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-dvh bg-[#161616] p-5 text-[#f2f2f2]">
+    <div className="min-h-dvh bg-[#161616] p-3 sm:p-5 text-[#f2f2f2]">
       <div className="flex flex-col items-center gap-2">
-        <div className="mx-auto w-3/4 ">
+        <div className="mx-auto w-full max-w-[1280px]">
           <TopBar
             unknownDeaths={unknownDeaths}
             unknownRecalls={unknownRecalls}
@@ -40,10 +40,10 @@ export default function App() {
           <ModeSelector />
         </div>
 
-        <div className="w-4/5">
+        <div className="w-full max-w-[1440px]">
           <TeamGrid />
         </div>
-        <div className="mb-2 gap-1 lg:mb-6 flex flex-wrap lg:text-nowrap lg:gap-2.5 ">
+        <div className="mb-2 flex w-full max-w-[1280px] flex-wrap gap-1 sm:gap-2 lg:mb-6">
           <button
             onClick={handleLeftClickDeaths}
             onContextMenu={handleRightClickDeaths}

@@ -7,19 +7,19 @@ export default function TeamGrid() {
   const teamCount = teams.length;
   const colsAmount =
     teamCount <= 18
-      ? "grid-cols-5"
+      ? "sm:grid-cols-5"
       : teamCount <= 28
-        ? "grid-cols-6"
+        ? "sm:grid-cols-6"
         : teamCount <= 33
-          ? "grid-cols-7"
+          ? "sm:grid-cols-7"
           : teamCount <= 38
-            ? "grid-cols-8"
+            ? "sm:grid-cols-8"
             : teamCount <= 43
-              ? "grid-cols-9"
-              : "grid-cols-10";
+              ? "sm:grid-cols-9"
+              : "sm:grid-cols-10";
 
   return (
-    <div className={`grid ${colsAmount} gap-3`}>
+    <div className={`grid grid-cols-2 gap-2 sm:gap-3 ${colsAmount}`}>
       {teams.map((team) => (
         <TeamCard key={team.id} team={team} />
       ))}
