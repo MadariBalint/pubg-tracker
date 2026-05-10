@@ -20,6 +20,20 @@ type DragState = {
   moved: boolean;
 };
 
+type ActivePointer = {
+  pointerId: number;
+  clientX: number;
+  clientY: number;
+};
+
+type PinchState = {
+  pointerIds: [number, number];
+  startDistance: number;
+  startZoom: number;
+  mapPixelX: number;
+  mapPixelY: number;
+};
+
 type GameMap = {
   name: string;
   image: string;
@@ -57,6 +71,17 @@ function getConstrainedPan(pan: Pan, zoom: number, viewportSize: number) {
   };
 }
 
+function getPointerDistance(first: ActivePointer, second: ActivePointer) {
+  return Math.hypot(first.clientX - second.clientX, first.clientY - second.clientY);
+}
+
+function getPointerCenter(first: ActivePointer, second: ActivePointer) {
+  return {
+    clientX: (first.clientX + second.clientX) / 2,
+    clientY: (first.clientY + second.clientY) / 2,
+  };
+}
+
 function formatPoint(point: MapPoint | undefined) {
   if (!point) return "--";
 
@@ -68,6 +93,8 @@ function formatPoint(point: MapPoint | undefined) {
 export default function MortarCalculator() {
   const mapRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<DragState | null>(null);
+  const activePointersRef = useRef<Map<number, ActivePointer>>(new Map());
+  const pinchRef = useRef<PinchState | null>(null);
   const mapImageRefs = useRef<Record<string, HTMLImageElement | null>>({});
   const [points, setPoints] = useState<MapPoint[]>([]);
   const [zoom, setZoom] = useState(MIN_ZOOM);
@@ -118,6 +145,28 @@ export default function MortarCalculator() {
     );
   }, [pan.x, pan.y, zoom]);
 
+  const startPinch = useCallback(() => {
+    const bounds = mapRef.current?.getBoundingClientRect();
+    const activePointers = Array.from(activePointersRef.current.values());
+    if (!bounds || activePointers.length < 2) return;
+
+    const [first, second] = activePointers;
+    const center = getPointerCenter(first, second);
+    const centerX = center.clientX - bounds.left;
+    const centerY = center.clientY - bounds.top;
+
+    pinchRef.current = {
+      pointerIds: [first.pointerId, second.pointerId],
+      startDistance: getPointerDistance(first, second),
+      startZoom: zoom,
+      mapPixelX: (centerX - pan.x) / zoom,
+      mapPixelY: (centerY - pan.y) / zoom,
+    };
+
+    dragRef.current = null;
+    setIsDragging(true);
+  }, [pan.x, pan.y, zoom]);
+
   const updateZoom = (nextZoom: number, anchorX = 0.5, anchorY = 0.5) => {
     if (isMapSwitching) return;
 
@@ -161,6 +210,35 @@ export default function MortarCalculator() {
       (event.clientY - bounds.top) / bounds.height,
     );
   };
+
+  const movePinch = useCallback(() => {
+    const pinch = pinchRef.current;
+    const bounds = mapRef.current?.getBoundingClientRect();
+    if (!pinch || !bounds) return;
+
+    const [firstId, secondId] = pinch.pointerIds;
+    const first = activePointersRef.current.get(firstId);
+    const second = activePointersRef.current.get(secondId);
+    if (!first || !second || pinch.startDistance === 0) return;
+
+    const center = getPointerCenter(first, second);
+    const centerX = center.clientX - bounds.left;
+    const centerY = center.clientY - bounds.top;
+    const distanceRatio = getPointerDistance(first, second) / pinch.startDistance;
+    const nextZoom = clamp(pinch.startZoom * distanceRatio, MIN_ZOOM, MAX_ZOOM);
+
+    setZoom(nextZoom);
+    setPan(
+      getConstrainedPan(
+        {
+          x: centerX - pinch.mapPixelX * nextZoom,
+          y: centerY - pinch.mapPixelY * nextZoom,
+        },
+        nextZoom,
+        bounds.width,
+      ),
+    );
+  }, []);
 
   const moveDrag = useCallback((pointerId: number, clientX: number, clientY: number) => {
     const drag = dragRef.current;
@@ -208,16 +286,49 @@ export default function MortarCalculator() {
 
     const handleWindowPointerMove = (event: PointerEvent) => {
       event.preventDefault();
+      activePointersRef.current.set(event.pointerId, {
+        pointerId: event.pointerId,
+        clientX: event.clientX,
+        clientY: event.clientY,
+      });
+
+      if (pinchRef.current) {
+        movePinch();
+        return;
+      }
+
       moveDrag(event.pointerId, event.clientX, event.clientY);
     };
 
     const handleWindowPointerUp = (event: PointerEvent) => {
       event.preventDefault();
+      const wasPinching = pinchRef.current !== null;
+      activePointersRef.current.delete(event.pointerId);
+
+      if (wasPinching) {
+        pinchRef.current = null;
+        dragRef.current = null;
+        activePointersRef.current.clear();
+        setIsDragging(false);
+        return;
+      }
+
       stopDragging(event.pointerId, true, event.clientX, event.clientY);
     };
 
     const handleWindowPointerCancel = (event: PointerEvent) => {
       event.preventDefault();
+      const wasPinching = pinchRef.current !== null;
+      activePointersRef.current.delete(event.pointerId);
+      pinchRef.current = null;
+
+      if (wasPinching) {
+        dragRef.current = null;
+        activePointersRef.current.clear();
+        setIsDragging(false);
+        return;
+      }
+
       stopDragging(event.pointerId, false, event.clientX, event.clientY);
     };
 
@@ -236,12 +347,22 @@ export default function MortarCalculator() {
       window.removeEventListener("pointerup", handleWindowPointerUp);
       window.removeEventListener("pointercancel", handleWindowPointerCancel);
     };
-  }, [isDragging, moveDrag, stopDragging]);
+  }, [isDragging, moveDrag, movePinch, stopDragging]);
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (event.button !== 0 || isMapSwitching) return;
 
     event.preventDefault();
+    activePointersRef.current.set(event.pointerId, {
+      pointerId: event.pointerId,
+      clientX: event.clientX,
+      clientY: event.clientY,
+    });
+
+    if (activePointersRef.current.size >= 2) {
+      startPinch();
+      return;
+    }
 
     dragRef.current = {
       pointerId: event.pointerId,
@@ -261,6 +382,8 @@ export default function MortarCalculator() {
 
   const resetMapState = () => {
     dragRef.current = null;
+    pinchRef.current = null;
+    activePointersRef.current.clear();
     setIsDragging(false);
     setPoints([]);
     resetView();
