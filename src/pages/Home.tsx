@@ -10,8 +10,8 @@ export default function Home() {
           </p>
           <h1 className="text-4xl font-bold sm:text-5xl">Choose your tool</h1>
           <p className="max-w-2xl text-base text-[#b9b9b9] sm:text-lg">
-            Jump into the tracker now. Mortar range and emergency pickup tools
-            have a reserved spot for when you build them next.
+            Jump into the tracker or measure mortar distance on an 8 km map.
+            Emergency pickup timing still has a reserved spot for later.
           </p>
         </div>
 
@@ -37,7 +37,28 @@ export default function Home() {
             </div>
           </Link>
 
-          <ToolCard title="Mortar Range Calculator" />
+          <Link
+            to="/mortar"
+            className="group border border-[#555] bg-[#202020] p-5 transition hover:border-[#f2b84b] hover:bg-[#252525]"
+          >
+            <div className="flex h-full min-h-40 flex-col justify-between gap-6">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#f2b84b]">
+                  Live
+                </p>
+                <h2 className="mt-2 text-2xl font-bold">
+                  Mortar Range Calculator
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-[#cfcfcf]">
+                  Mark two points on an 8 km map and calculate the direct range
+                  between them.
+                </p>
+              </div>
+              <span className="text-sm font-semibold text-white transition group-hover:text-[#f2b84b]">
+                Open calculator
+              </span>
+            </div>
+          </Link>
           <ToolCard title="Emergency Pickup Timer" />
         </div>
       </div>
